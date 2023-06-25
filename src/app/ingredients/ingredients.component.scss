@@ -1,0 +1,43 @@
+.ingredients-form{
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2rem;
+  justify-content: center;
+  .ingredients-list{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    .--item{
+      width: 100%;
+      display: inline-flex;
+      .mat-mdc-form-field-subscript-wrapper{
+        display: none !important;
+      }
+      .--next-value{
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        margin-left: 2rem;
+        .sum-value{
+          margin-left: 2rem;
+        }
+      }
+    }
+  }
+  .form-buttons{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    .add-item{
+      margin: 2rem;
+    }
+    .submit-form{
+      margin: 2rem;
+
+    }
+  }
+}

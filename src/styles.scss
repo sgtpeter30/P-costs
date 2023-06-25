@@ -1,1 +1,142 @@
+// @use "@angular/material" as mat;
+
+// @import "@angular/material/theming";
+
+// @include mat.core();
+
+// $angular-primary: mat.define-palette(mat.$teal-palette, 500, 100, 900);
+// $angular-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// $angular-warn: mat.define-palette(mat.$red-palette);
+
+// $angular-default-theme: mat.define-dark-theme(
+//   (
+//     color: (
+//       primary: $angular-primary,
+//       accent: $angular-accent,
+//       warn: $angular-warn,
+//     ),
+//   )
+// );
+
+// @include mat.all-component-themes($angular-default-theme);
+
+@import '@angular/material/theming';
+@include mat-core();
+
+$theme-accent: (
+  100: #f9e5b6,
+  200: #f6d486,
+  300: #f2c356,
+  400: #efb631,
+  50: #fdf5e2,
+  500: #eca90d,
+  600: #eaa20b,
+  700: #e79809,
+  800: #e48f07,
+  900: #df7e03,
+  A100: #fff4de,
+  A200: #ffe3ab,
+  A400: #ffd378,
+  A700: #ffca5e,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$theme-primary: (
+  100: #d1b3b3,
+  200: #b38080,
+  300: #944d4d,
+  400: #7d2626,
+  50: #ede0e0,
+  500: #660000,
+  600: #5e0000,
+  700: #530000,
+  800: #490000,
+  900: #380000,
+  A100: #ff4646,
+  A200: #ff1313,
+  A400: #df0000,
+  A700: #c50000,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$theme-warn: (
+  100: #c3fbf5,
+  200: #9cf8ef,
+  300: #74f5e9,
+  400: #56f3e4,
+  50: #e7fdfb,
+  500: #38f1df,
+  600: #32efdb,
+  700: #2bedd7,
+  800: #24ebd2,
+  900: #17e7ca,
+  A100: #ffffff,
+  A200: #d7fffb,
+  A400: #a4fff5,
+  A700: #8afff3,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$theme-primary-palette: mat-palette($theme-primary);
+$theme-accent-palette:  mat-palette($theme-accent, 500, 900, A100);
+$theme-warn-palette:    mat-palette($theme-warn);
+
+$theme: mat-dark-theme($theme-primary-palette, $theme-accent-palette, $theme-warn-palette);
+
+@include angular-material-theme($theme);
+
+
+
 /* You can add global styles to this file, and also import other style files */
+
+html{font-size: 10px;}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+
+
