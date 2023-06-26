@@ -1,60 +1,67 @@
 <form [formGroup]="invoiceForm" (submit)="submitApplication()" class="ingredients-form">
-  <div formArrayName="invoiceList" *ngFor="let invoiceGroup of invoiceList.controls; let i = index">
-    <div [formGroupName]="i">
-      <mat-form-field>
-        <input formControlName="company" matInput placeholder="Nazwa firmy">
-      </mat-form-field>
-      <mat-form-field class="example-full-width">
-        <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Data faktury">
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
+  <ng-container *ngIf="invoiceList.length > 0">
+    <div formArrayName="invoiceList" *ngFor="let invoiceGroup of invoiceList?.controls; let i = index">
+      <div [formGroupName]="i">
+        <mat-form-field>
+          <mat-select formControlName="company" placeholder="Nazwa firmy">
+            <mat-option *ngFor="let company of companyList" [value]="company">
+              {{company}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Data faktury">
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
 
 
-      <div formArrayName="ingredientsList" class="ingredients-list">
-        <div *ngFor="let ingredientGroup of ingredientsList.controls; let secondIndex = index;" class="--group">
-          <div [formGroupName]="secondIndex" class="--item">
-            <!-- ingredientGroup -->
-            <mat-form-field>
-              <input formControlName="ingredientName" matInput placeholder="Nazwa">
-            </mat-form-field>
-            <mat-form-field >
-              <input formControlName="ingredientQuantity" matInput placeholder="Ilość" type="number">
-            </mat-form-field>
-            <mat-form-field>
-              <mat-select formControlName="ingredientTypeVolume" placeholder="Jednostka miary">
-                <mat-option *ngFor="let type of ingredientTypeVolume" [value]="type">
-                  {{type}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <!-- ceny -->
-            <div formGroupName="pricesPerYear">
+        <div formArrayName="ingredientsList" class="ingredients-list">
+          <div *ngFor="let ingredientGroup of ingredientsList.controls; let secondIndex = index;" class="--group">
+            <div [formGroupName]="secondIndex" class="--item">
+              <!-- ingredientGroup -->
               <mat-form-field>
-                <input formControlName="ingredientPriceNet" matInput placeholder="Cena netto">
+                <input formControlName="ingredientName" matInput placeholder="Nazwa">
+              </mat-form-field>
+              <mat-form-field >
+                <input formControlName="ingredientQuantity" matInput placeholder="Ilość" type="number">
               </mat-form-field>
               <mat-form-field>
-                <mat-select formControlName="ingredientTax" placeholder="Podatek">
-                  <mat-option *ngFor="let type of ingredientTypeTax" [value]="type">
+                <mat-select formControlName="ingredientTypeVolume" placeholder="Jednostka miary">
+                  <mat-option *ngFor="let type of ingredientTypeVolume" [value]="type">
                     {{type}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field>
-                <input formControlName="ingredientPriceGross" matInput placeholder="Cena brutto">
-              </mat-form-field>
+              <!-- ceny -->
+              <div formGroupName="prices">
+                <mat-form-field>
+                  <input formControlName="ingredientPriceNet" matInput placeholder="Cena netto">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-select formControlName="ingredientTax" placeholder="Podatek">
+                    <mat-option *ngFor="let type of ingredientTypeTax" [value]="type">
+                      {{type}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                  <input formControlName="ingredientPriceGross" matInput placeholder="Cena brutto">
+                </mat-form-field>
+              </div>
             </div>
           </div>
         </div>
+
+
       </div>
-
-
     </div>
-  </div>
+  </ng-container>
 
 
   <div class="form-buttons">
     <button mat-raised-button color="primary" class="primary add-item" (click)="addIngredientGroup()">Dodaj item</button>
+    <button mat-raised-button color="primary" class="primary add-item" (click)="addInvoiceGroup()">Dodaj kolejną fakturę</button>
     <button mat-raised-button color="primary" type="submit" class="primary submit-form">Submit form</button>
   </div>
 </form>

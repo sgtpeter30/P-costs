@@ -9,10 +9,9 @@ export interface IngredientsGroup {
     ingredientName: string,
     ingredientQuantity: number,
     ingredientTypeVolume: string,
-    pricePerYear: PricesPerYear
+    prices: IngredientsPrices
 }
-export interface PricesPerYear{
-  ingredientYear: string,
+export interface IngredientsPrices{
   ingredientPriceNet: number,
   ingredientTax: number,
   ingredientPriceGross: number,

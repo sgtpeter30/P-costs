@@ -1,3 +1,6 @@
+export const CompanyList: string[] = [
+  ''
+]
 export const IngredientTypeVolume: string[] = [
   'KG',
   'SZT',

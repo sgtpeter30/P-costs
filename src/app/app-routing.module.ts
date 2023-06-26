@@ -9,7 +9,7 @@ const routes: Routes = [
     path: '',
     component: IngredientsComponent,
     resolve: {
-      ingredientsList: IngredientResolver
+      resolver: IngredientResolver
     },
   }
 ];
