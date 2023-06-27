@@ -11,8 +11,6 @@ export class IngredientService {
   ){}
 
   getIngredients() {
-    console.log(this.http.get(this.url));
-
     return this.http.get(this.url);
   }
 }

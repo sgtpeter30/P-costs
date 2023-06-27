@@ -25,35 +25,54 @@ export class IngredientsComponent implements OnInit, OnDestroy{
     private activeRoute: ActivatedRoute,
     private http: HttpClient,
   ){}
-
-  ingredientsList = this.fb.array([
-    this.createIngredientGroup()
-  ]);
+  invoiceForm: FormGroup = this.fb.group({})
+  // invoiceForm: FormGroup
+  invoiceList:FormArray;
+  ingredientsList: FormArray
+  // ingredientsList = this.fb.array([
+  //   this.createIngredientGroup()
+  // ]);
   // invoiceGroup = this.fb.group({
   //   date: '',
   //   company: '',
   //   ingredientsList: this.ingredientsList
   // });
-  // invoiceList = this.fb.array([this.createInvoiceGroup()]);
-  invoiceList:FormArray = this.fb.array([]);
-  invoiceForm: FormGroup
 
-  createInvoiceList(data: InvoiceGroup[]){
-    data.forEach(invoice=>{
-      this.createInvoiceGroup(invoice)
-    })
+  // invoiceList:FormArray = this.fb.array([this.createInvoiceGroup()]);
+  // invoiceList:FormArray = this.fb.array([]);
+
+  // invoiceForm: FormGroup = this.fb.group({
+    // invoiceList: this.createInvoiceList()
+  // })
+
+  log(invoiceGroup){
+    console.log(invoiceGroup)
+    console.log(invoiceGroup.value)
+  }
+
+  createInvoiceList(data?: InvoiceGroup[]){
+    this.invoiceList = this.fb.array([])
+    if(data){
+      data.forEach(invoice=>{
+        this.invoiceList.push(this.createInvoiceGroup(invoice))
+      })
+    }else{
+      this.invoiceList.push(this.createInvoiceGroup())
+    }
   }
 
   ngOnInit(){
     this.sub = this.activeRoute.data.subscribe((res) => {
-      console.log("wtf");
-      console.log(res);
-      console.log(res['resolver']);
-      if(res){
-        this.createInvoiceList(res['resolver'] as InvoiceGroup[])
+      if(res['resolver'].length > 0){
+        console.log(res['resolver']);
+        // this.createInvoiceList(res['resolver'] as InvoiceGroup[])
+        this.invoiceForm = this.fb.group({
+          invoiceList: this.createInvoiceList()
+        })
       }else{
         this.invoiceForm = this.fb.group({
-          invoiceList: this.invoiceList
+          // invoiceList: this.invoiceList
+          invoiceList: this.createInvoiceList()
         })
       }
     })
@@ -103,11 +122,11 @@ export class IngredientsComponent implements OnInit, OnDestroy{
     })
   }
 
-  addInvoiceGroup(){
-    this.invoiceList.push(this.createInvoiceGroup())
+  addInvoiceGroup(group){
+    group.push(this.createInvoiceGroup())
   }
-  addIngredientGroup(){
-    this.ingredientsList.push(this.createIngredientGroup());
+  addIngredientGroup(group){
+    group.push(this.createIngredientGroup());
   }
   submitApplication() {
     // przerobić form

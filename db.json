@@ -1,23 +1,5 @@
 {
   "invoiceList": [
-    [
-      {
-        "date": "24.04",
-        "company": "firma 1",
-        "ingredientsList": [
-          {
-            "ingredientName": "mąka",
-            "ingredientQuantity": 1,
-            "ingredientTypeVolume": "KG",
-            "pricesPerYear": {
-              "ingredientYear": "",
-              "ingredientPriceNet": "",
-              "ingredientTax": "",
-              "ingredientPriceGross": ""
-            }
-          }
-        ]
-      }
-    ]
+    []
   ]
 }
