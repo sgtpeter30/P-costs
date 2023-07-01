@@ -1,5 +1,67 @@
 {
-  "invoiceList": [
-    []
+  "invoices": [
+    {
+      "id": "invoiceList",
+      "invoiceList": [
+        {
+          "company": "Farutex",
+          "date": "2023-06-21T22:00:00.000Z",
+          "ingredientsList": [
+            {
+              "ingredientName": "Test",
+              "ingredientQuantity": 2,
+              "ingredientTypeVolume": "KG",
+              "prices": {
+                "ingredientPriceNet": 100,
+                "ingredientTax": 8,
+                "ingredientPriceGross": 108
+              }
+            },
+            {
+              "ingredientName": "",
+              "ingredientQuantity": "",
+              "ingredientTypeVolume": "",
+              "prices": {
+                "ingredientPriceNet": "",
+                "ingredientTax": "",
+                "ingredientPriceGross": ""
+              }
+            }
+          ]
+        },
+        {
+          "company": "Farutex",
+          "date": "2023-06-14T22:00:00.000Z",
+          "ingredientsList": [
+            {
+              "ingredientName": "Test2",
+              "ingredientQuantity": 3,
+              "ingredientTypeVolume": "SZT",
+              "prices": {
+                "ingredientPriceNet": "50",
+                "ingredientTax": 0,
+                "ingredientPriceGross": "50"
+              }
+            }
+          ]
+        },
+        {
+          "company": "",
+          "date": "",
+          "ingredientsList": [
+            {
+              "ingredientName": "",
+              "ingredientQuantity": "",
+              "ingredientTypeVolume": "",
+              "prices": {
+                "ingredientPriceNet": "",
+                "ingredientTax": "",
+                "ingredientPriceGross": ""
+              }
+            }
+          ]
+        }
+      ]
+    }
   ]
 }

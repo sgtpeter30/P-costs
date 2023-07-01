@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { CompanyList, IngredientTypeTax, IngredientTypeVolume } from '../models/dictionaries';
@@ -14,7 +14,8 @@ import { Subscription } from 'rxjs';
 })
 
 export class IngredientsComponent implements OnInit, OnDestroy{
-  url: string = 'http://localhost:3000/invoiceList';
+  // url: string = 'http://localhost:3000/invoiceList';
+  url: string = 'http://localhost:3000/invoices/invoiceList';
   companyList = CompanyList;
   ingredientTypeVolume = IngredientTypeVolume;
   ingredientTypeTax = IngredientTypeTax;
@@ -25,56 +26,43 @@ export class IngredientsComponent implements OnInit, OnDestroy{
     private activeRoute: ActivatedRoute,
     private http: HttpClient,
   ){}
-  invoiceForm: FormGroup = this.fb.group({})
-  // invoiceForm: FormGroup
+
+  invoiceForm: FormGroup;
   invoiceList:FormArray;
-  ingredientsList: FormArray
-  // ingredientsList = this.fb.array([
-  //   this.createIngredientGroup()
-  // ]);
-  // invoiceGroup = this.fb.group({
-  //   date: '',
-  //   company: '',
-  //   ingredientsList: this.ingredientsList
-  // });
-
-  // invoiceList:FormArray = this.fb.array([this.createInvoiceGroup()]);
-  // invoiceList:FormArray = this.fb.array([]);
-
-  // invoiceForm: FormGroup = this.fb.group({
-    // invoiceList: this.createInvoiceList()
-  // })
-
-  log(invoiceGroup){
-    console.log(invoiceGroup)
-    console.log(invoiceGroup.value)
-  }
-
-  createInvoiceList(data?: InvoiceGroup[]){
-    this.invoiceList = this.fb.array([])
-    if(data){
-      data.forEach(invoice=>{
-        this.invoiceList.push(this.createInvoiceGroup(invoice))
-      })
-    }else{
-      this.invoiceList.push(this.createInvoiceGroup())
-    }
-  }
+  ingredientsList: FormArray;
 
   ngOnInit(){
+    this.invoiceForm = this.fb.group({
+      invoiceList: this.fb.array([])
+    })
     this.sub = this.activeRoute.data.subscribe((res) => {
-      if(res['resolver'].length > 0){
-        console.log(res['resolver']);
-        // this.createInvoiceList(res['resolver'] as InvoiceGroup[])
-        this.invoiceForm = this.fb.group({
-          invoiceList: this.createInvoiceList()
-        })
+      if(res['resolver'].invoiceList.length){
+        this.createInvoicesFromProxy(res['resolver'].invoiceList)
       }else{
-        this.invoiceForm = this.fb.group({
-          // invoiceList: this.invoiceList
-          invoiceList: this.createInvoiceList()
-        })
+        this.addInvoiceGroup();
       }
+    })
+
+    this.setBaseCalculation();
+  }
+
+  get getInvoiceList(){
+    return this.invoiceForm.get('invoiceList') as FormArray
+  }
+
+  getIngredientsList(index: number){
+    return this.getInvoiceList.get([index]).get('ingredientsList') as FormArray
+  }
+
+  createInvoicesFromProxy(invoiceList: InvoiceGroup[]){
+    invoiceList.forEach(invoiceItem => {
+      const invoiceGroup = this.createInvoiceGroup(invoiceItem);
+      this.getInvoiceList.push(invoiceGroup)
+      const invoiceLength = this.getInvoiceList.length - 1;
+      invoiceItem.ingredientsList.forEach(ingredientItem => {
+        const ingredientsGroup = this.createIngredientGroup(ingredientItem)
+        this.getIngredientsList(invoiceLength).push(ingredientsGroup)
+      })
     })
   }
 
@@ -82,26 +70,8 @@ export class IngredientsComponent implements OnInit, OnDestroy{
     return this.fb.group({
       company: data?.company ?? '',
       date: data?.date ?? '',
-      ingredientsList: this.createIngredientsList(data?.ingredientsList || null)
+      ingredientsList: this.fb.array([])
     })
-  }
-
-
-  createIngredientsList(data?: IngredientsGroup[]){
-    let ingredientsList: FormArray = this.fb.array([]);
-    console.log("ingredientsList create");
-    console.log(ingredientsList);
-
-
-    if(data){
-      data.forEach(ingredient =>{
-        console.log('push1');
-        ingredientsList.push(this.createIngredientGroup(ingredient))
-      })
-    }else{
-      ingredientsList.push(this.createIngredientGroup())
-    }
-    return ingredientsList
   }
 
   createIngredientGroup(data?: IngredientsGroup){
@@ -109,28 +79,81 @@ export class IngredientsComponent implements OnInit, OnDestroy{
       ingredientName: data?.ingredientName ?? '',
       ingredientQuantity: data?.ingredientQuantity ?? '',
       ingredientTypeVolume: data?.ingredientTypeVolume ?? '',
-      prices: this.createPrices(data?.prices ?? null),
-      // prices: data?.prices ?? this.createPrices(),
+      prices: this.fb.group({
+        ingredientPriceNet: data?.prices.ingredientPriceNet ?? '',
+        ingredientTax: data?.prices.ingredientTax ?? '',
+        ingredientPriceGross: data?.prices.ingredientPriceGross ?? '',
+        worthNetto: data?.prices.worthNetto ?? '',
+        worthGross: data?.prices.worthGross ?? '',
+      })
     })
   }
 
-  createPrices(data?: IngredientsPrices){
-    this.fb.group({
-      ingredientPriceNet: data?.ingredientPriceNet ?? [''],
-      ingredientTax: data?.ingredientTax ?? [''],
-      ingredientPriceGross: data?.ingredientPriceGross ?? [''],
-    })
+  addInvoiceGroup(){
+    const invoiceGroup = this.createInvoiceGroup()
+    const ingredientsGroup = this.createIngredientGroup()
+    this.getInvoiceList.push(invoiceGroup)
+    this.getIngredientsList(this.getInvoiceList.length-1).push(ingredientsGroup)
   }
 
-  addInvoiceGroup(group){
-    group.push(this.createInvoiceGroup())
-  }
   addIngredientGroup(group){
-    group.push(this.createIngredientGroup());
+    const ingredientsGroup = this.createIngredientGroup()
+    this.getIngredientsList(group).push(ingredientsGroup)
   }
+
+  setBaseCalculation(){
+    const invoiceListLength = this.getInvoiceList.length
+    for (let index = 0; index < invoiceListLength; index++) {
+      const ingredientsArray: FormArray = (this.getIngredientsList(index) as FormArray)
+      this.setCalcGross(ingredientsArray)
+      this.setCalcWorth(ingredientsArray)
+    }
+  }
+
+  setCalcGross(ingredientsArray: FormArray){
+    ingredientsArray.controls.forEach(ingredient => {
+      const prices = ingredient.get('prices')
+      const ingredientPriceNet = prices.get('ingredientPriceNet');
+      const ingredientPriceGross = prices.get('ingredientPriceGross');
+      const ingredientTax = prices.get('ingredientTax')
+      // calc gross price with netto and tax on netto change
+      ingredientPriceNet.valueChanges.subscribe(value => {
+        ingredientPriceGross.setValue(this.calcGross(value, ingredientTax.value))
+      })
+      ingredientTax.valueChanges.subscribe(value => {
+        ingredientPriceGross.setValue(this.calcGross(ingredientPriceNet.value, value))
+      })
+    });
+  }
+  setCalcWorth(ingredientsArray: FormArray){
+    ingredientsArray.controls.forEach(ingredient => {
+      const prices = ingredient.get('prices')
+      const ingredientPriceNet = prices.get('ingredientPriceNet');
+      const ingredientPriceGross = prices.get('ingredientPriceGross');
+      const ingredientQuantity = ingredient.get('ingredientQuantity')
+      const calcQuantity = (quantity, price)=>{
+        return quantity * price
+      }
+      // calc gross price with netto and tax on netto change
+      ingredientQuantity.valueChanges.subscribe(value => {
+        prices.get('worthNetto').setValue(calcQuantity(value, ingredientPriceNet.value))
+        prices.get('worthGross').setValue(calcQuantity(value, ingredientPriceGross.value))
+      })
+      ingredientPriceNet.valueChanges.subscribe(value => {
+        prices.get('worthNetto').setValue(calcQuantity(ingredientQuantity.value, value))
+      })
+      ingredientPriceGross.valueChanges.subscribe(value => {
+        prices.get('worthGross').setValue(calcQuantity(ingredientQuantity.value, value))
+      })
+    });
+  };
+
+  calcGross(value: number, tax: number){
+    return value + ((value * tax)/100)
+  }
+
   submitApplication() {
-    // przerobić form
-    // this.http.post(this.url, this.invoiceForm.value.invoiceList).subscribe()
+    this.http.patch(this.url, this.invoiceForm.value  ).subscribe()
   }
 
   ngOnDestroy() {

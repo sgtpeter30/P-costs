@@ -1,43 +1,57 @@
-.ingredients-form{
+@import '@angular/material/theming';
+@import '../../styles.scss';
+
+.invoice-form{
   display: flex;
   flex-wrap: wrap;
+  max-width: 90vw;
+  margin: auto;
   padding: 2rem;
   justify-content: center;
-  .ingredients-list{
+  .invoice-list{
     display: flex;
     flex-wrap: wrap;
     width: 100%;
     align-content: center;
     align-items: center;
     justify-content: flex-start;
-    .--item{
-      width: 100%;
-      display: inline-flex;
-      .mat-mdc-form-field-subscript-wrapper{
-        display: none !important;
+    .invoice-group{
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: 2px solid mat-color($theme-primary-palette);
+      border-bottom: 2px solid mat-color($theme-accent-palette);
+      margin-bottom: 4rem;
+      align-items: baseline;
+      .--info{
+        width: 100%;
       }
-      .--next-value{
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        align-content: center;
-        margin-left: 2rem;
-        .sum-value{
-          margin-left: 2rem;
+      .ingredients-list{
+        display: flex;
+        flex-wrap: wrap;
+        width: 90%;
+        .--group{
+          display: flex;
+          width: 100%;
+          .--item{
+            width: 100%;
+            display: inline-flex;
+            .--prices{
+              display: inline-flex;
+            }
+          }
         }
+      }
+      .add-item{
+        width: calc(10% - 2rem);
+        margin-left: 2rem;
       }
     }
   }
+  .add-invoice{}
   .form-buttons{
     display: flex;
     justify-content: center;
+    width: 100%;
     margin-top: 2rem;
-    .add-item{
-      margin: 2rem;
-    }
-    .submit-form{
-      margin: 2rem;
-
-    }
   }
 }

@@ -1,9 +1,7 @@
-<form [formGroup]="invoiceForm" (submit)="submitApplication()" class="ingredients-form">
-  <ng-container *ngIf="invoiceList.controls && invoiceList.value.length > 0">
-    <div formArrayName="invoiceList" *ngFor="let invoiceGroup of invoiceList?.controls; let firstIndex = index">
-      {{firstIndex}}
-      <button (click)="log(invoiceGroup)">Click ME!</button>
-      <div [formGroupName]="firstIndex">
+<form [formGroup]="invoiceForm" class="invoice-form">
+  <div formArrayName="invoiceList" class="invoice-list">
+    <div *ngFor="let invoiceGroup of getInvoiceList.controls; let firstIndex = index" [formGroupName]="firstIndex" class="invoice-group">
+      <div class="--info">
         <mat-form-field>
           <mat-select formControlName="company" placeholder="Nazwa firmy">
             <mat-option *ngFor="let companies of companyList" [value]="companies">
@@ -11,62 +9,64 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="example-full-width">
+        <mat-form-field>
           <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Data faktury">
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
+      </div>
 
-        <ng-container *ngIf="ingredientsList.value.length">
-          <div formArrayName="ingredientsList" class="ingredients-list">
-            <div *ngFor="let ingredientGroup of ingredientsList.controls; let secondIndex = index;" class="--group">
-              <div [formGroupName]="secondIndex" class="--item">
-                <!-- ingredientGroup -->
-                <mat-form-field>
-                  <input formControlName="ingredientName" matInput placeholder="Nazwa">
-                </mat-form-field>
-                <mat-form-field >
-                  <input formControlName="ingredientQuantity" matInput placeholder="Ilość" type="number">
-                </mat-form-field>
-                <mat-form-field>
-                  <mat-select formControlName="ingredientTypeVolume" placeholder="Jednostka miary">
-                    <mat-option *ngFor="let type of ingredientTypeVolume" [value]="type">
-                      {{type}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <!-- ceny -->
-                <div formGroupName="prices">
-                  <mat-form-field>
-                    <input formControlName="ingredientPriceNet" matInput placeholder="Cena netto">
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-select formControlName="ingredientTax" placeholder="Podatek">
-                      <mat-option *ngFor="let type of ingredientTypeTax" [value]="type">
-                        {{type}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <input formControlName="ingredientPriceGross" matInput placeholder="Cena brutto">
-                  </mat-form-field>
-                </div>
-              </div>
-              <button mat-raised-button color="primary" class="primary add-item" (click)="addIngredientGroup(ingredientGroup)">Dodaj item</button>
+      <div formArrayName="ingredientsList" class="ingredients-list">
+        <div *ngFor="let ingredientGroup of getIngredientsList(firstIndex).controls; let secondIndex = index;"
+          [formGroupName]="secondIndex" class="--group">
+          <div class="--item">
+            <!-- ingredientGroup -->
+            <mat-form-field>
+              <input formControlName="ingredientName" matInput placeholder="Nazwa">
+            </mat-form-field>
+            <mat-form-field>
+              <input formControlName="ingredientQuantity" matInput placeholder="Ilość" type="number">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select formControlName="ingredientTypeVolume" placeholder="Jednostka miary">
+                <mat-option *ngFor="let type of ingredientTypeVolume" [value]="type">
+                  {{type}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <!-- ceny -->
+            <div formGroupName="prices" class="--prices">
+              <mat-form-field>
+                <input formControlName="ingredientPriceNet" matInput type="number" placeholder="Cena netto">
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select formControlName="ingredientTax" placeholder="Podatek">
+                  <mat-option *ngFor="let type of ingredientTypeTax" [value]="type">
+                    {{type}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <input formControlName="ingredientPriceGross" matInput type="number" placeholder="Cena brutto">
+              </mat-form-field>
+              <mat-form-field>
+                <input formControlName="worthNetto" matInput type="number" placeholder="Wartość netto">
+              </mat-form-field>
+              <mat-form-field>
+                <input formControlName="worthGross" matInput type="number" placeholder="Wartość brutto">
+              </mat-form-field>
             </div>
           </div>
-        </ng-container>
-
-
+        </div>
       </div>
-      <button mat-raised-button color="primary" class="primary add-item" (click)="addInvoiceGroup(invoiceGroup)">Dodaj kolejną fakturę</button>
+
+      <button mat-raised-button color="primary" class="primary add-item" (click)="addIngredientGroup(firstIndex)">Dodaj item</button>
     </div>
-  </ng-container>
+  </div>
+  <button mat-raised-button color="primary" class="primary add-invoice" (click)="addInvoiceGroup()">Dodaj kolejną fakturę</button>
 
 
   <div class="form-buttons">
-
-
-    <button mat-raised-button color="primary" type="submit" class="primary submit-form">Submit form</button>
+    <button (click)="submitApplication()" mat-raised-button color="primary" type="submit" class="primary submit-form">Submit form</button>
   </div>
 </form>

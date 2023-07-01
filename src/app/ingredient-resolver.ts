@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from "@angular
 
 @Injectable({providedIn: 'root',})
 export class IngredientService {
-  url: string = 'http://localhost:3000/invoiceList';
+  url: string = 'http://localhost:3000/invoices/invoiceList';
 
   constructor(
     private http: HttpClient

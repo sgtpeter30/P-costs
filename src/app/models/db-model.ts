@@ -15,4 +15,6 @@ export interface IngredientsPrices{
   ingredientPriceNet: number,
   ingredientTax: number,
   ingredientPriceGross: number,
+  worthNetto: number;
+  worthGross: number;
 }

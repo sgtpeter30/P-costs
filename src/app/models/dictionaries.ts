@@ -1,5 +1,5 @@
 export const CompanyList: string[] = [
-  ''
+  'Farutex'
 ]
 export const IngredientTypeVolume: string[] = [
   'KG',
